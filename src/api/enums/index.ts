@@ -23,3 +23,19 @@ export enum Pagination {
     DEFAULT_PAGE_NUMBER = 1,
     DEFAULT_PAGE_SIZE = 20
 }
+
+
+export enum TransactionType {
+    TRANSFER = "transfer"
+}
+
+
+export enum TransactionStatus {
+    SUCCESS = "success",
+    FAILED = "failed",
+    PENDING = "pending",
+    ONGOING = "on-going",
+    REVERSED = "reversed",
+    AWAITING_CONFIRMATION = "awaiting-confirmation",
+    NEW = "new",
+}
