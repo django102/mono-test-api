@@ -1,5 +1,6 @@
-import { ResponseStatus } from "../enums";
 import { Response } from "express";
+
+import { ResponseStatus } from "../enums";
 
 export class ServiceResponse<T = any, U = any> {
     constructor(

@@ -1,12 +1,12 @@
-import helmet from "helmet";
+import compression from "compression";
 import cors from "cors";
+import { Application, json, Request, Response, urlencoded } from "express";
 import rateLimit from "express-rate-limit";
-import compression from 'compression';
+import helmet from "helmet";
 
-import { Application, json, urlencoded, Request, Response } from 'express';
 import router from "../api/routes";
-import loggerMiddleware from "../middleware/logger";
 import logger from "../lib/logger";
+import loggerMiddleware from "../middleware/logger";
 
 
 const corsOptions = {
@@ -49,29 +49,29 @@ const expressConfig = (app: Application): void => {
         if (!req._startTime) req._startTime = startTime;
     
         const payload = {
-          service: 'shortlet-app',
-          timestamp: new Date(),
-          type: "request",
-          created: startTime,
-          age: `${req.headers.age ? req.headers.age + ageSinceRequestStart : ageSinceRequestStart}ms`,
-          endpoint: req.originalUrl || req.url,
-          tag: req.tag || req.headers["tag"],
-          payload: {
-            verb: req.method,
-            client: req.headers["x-forwarded-for"] ? req.headers["x-forwarded-for"].split(",")[0] : req.connection.remoteAddress,
-            headers: { ...req.headers, ...(req.headers.authorization ? { authorization: "Bearer xyz" } : {}) },
-            body: req.body,
-            param: req.param,
-            query: req.query
-          },
-        }
+            service: "shortlet-app",
+            timestamp: new Date(),
+            type: "request",
+            created: startTime,
+            age: `${req.headers.age ? req.headers.age + ageSinceRequestStart : ageSinceRequestStart}ms`,
+            endpoint: req.originalUrl || req.url,
+            tag: req.tag || req.headers["tag"],
+            payload: {
+                verb: req.method,
+                client: req.headers["x-forwarded-for"] ? req.headers["x-forwarded-for"].split(",")[0] : req.connection.remoteAddress,
+                headers: { ...req.headers, ...(req.headers.authorization ? { authorization: "Bearer xyz" } : {}) },
+                body: req.body,
+                param: req.param,
+                query: req.query
+            },
+        };
     
         logger.log("info", JSON.stringify(payload));
         next();
-      })
+    });
 
-    app.get('/', (req: Request, res: Response) => res.send({ message: 'Welcome' }));
+    app.get("/", (req: Request, res: Response) => res.send({ message: "Welcome" }));
     app.use("/api", router);
-}
+};
 
 export default expressConfig;

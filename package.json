@@ -1,29 +1,50 @@
 {
   "name": "mono-test-api",
   "version": "1.0.0",
-  "description": "Mono Assessment Test, Backend API",
-  "main": "src/app.ts",
-  "repository": "https://github.com/django102/mono-test-api.git",
-  "author": "Wale K. Santos <eighteen.eighty.one@outlook.com>",
-  "license": "MIT",
   "private": false,
+  "description": "Mono Assessment Test, Backend API",
+  "repository": "https://github.com/django102/mono-test-api.git",
+  "license": "MIT",
+  "author": "Wale K. Santos <eighteen.eighty.one@outlook.com>",
+  "main": "src/app.ts",
   "scripts": {
-    "dev": "nodemon",
     "build": "node package-build.js",
+    "deploy": "yarn",
+    "dev": "nodemon",
+    "lint": "eslint -c ./.eslintrc.js ./src --format stylish --fix --ext .ts",
+    "lint:lint": "tslint -c tslint.json --fix \"src/**/*.ts\"",
     "start": "yarn build && node ./dist/app.js",
-    "lint": "tslint -c tslint.json --fix \"src/**/*.ts\"",
-    "ts:watch": "tsc -w",
     "test": "jest --verbose --runInBand --coverage --collectCoverageFrom=src/api/**/*.ts --forceExit",
-    "deploy": "yarn"
+    "ts:watch": "tsc -w"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "rootDir": ".",
+    "setupFilesAfterEnv": [
+      "./test/setup.ts"
+    ],
+    "testEnvironment": "node",
+    "testRegex": "./test/.*test.ts$",
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    }
   },
   "dependencies": {
     "@redis/json": "^1.0.7",
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.5",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
     "body-parser": "^1.20.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "eslint-plugin-eslint-comments": "^3.2.0",
     "express": "^4.21.0",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
@@ -41,31 +62,22 @@
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
-    "typescript": "^5.6.2",
+    "typescript": "^5.5.4",
     "winston": "^3.14.2",
     "yarn": "^1.22.22"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@types/jest": "^29.5.13",
+    "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsdoc": "^48.5.0",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
     "istanbul": "^0.4.5",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5"
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "rootDir": ".",
-    "testRegex": "./test/.*test.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "./test/setup.ts"
-    ]
+    "ts-jest": "^29.2.5",
+    "typescript-eslint": "^7.15.0"
   }
 }

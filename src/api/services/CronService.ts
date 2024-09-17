@@ -4,14 +4,13 @@ import cron from "node-cron";
 
 const CreateSchedule = (time: string, task: any, zone: cron.ScheduleOptions) => {
     return cron.schedule(time, task, zone);
-}
+};
 
 
-
-const testSchedule = CreateSchedule("*/10 * * * * *", () => { console.log("CRON executed") }, {
+const testSchedule = CreateSchedule("*/10 * * * * *", () => { console.log("CRON executed"); }, {
     scheduled: true,
-    timezone: 'Africa/Lagos'
-})
+    timezone: "Africa/Lagos"
+});
 
 
 export const scheduleList = [

@@ -1,12 +1,13 @@
 import { Response } from "express";
-import { ResponseStatus } from "../enums";
+
 import logger from "../../lib/logger";
+import { ResponseStatus } from "../enums";
 
 
 export default {
     success: (res: Response, code: ResponseStatus, message: string, data?: any, meta?: any) => {
         const response = {
-            status: 'success',
+            status: "success",
             message,
             data,
             meta
@@ -18,14 +19,14 @@ export default {
 
     error: (res: Response, code: ResponseStatus, message: string) => {
         const response = {
-            status: 'error',
+            status: "error",
             message,
         };
 
         logResponse(res, response, code, "error");
         return res.status(code).json(response);
     }
-}
+};
 
 
 const logResponse = (res: Response, body: any, code: ResponseStatus, type: string) => {
@@ -36,7 +37,7 @@ const logResponse = (res: Response, body: any, code: ResponseStatus, type: strin
     const ageSinceRequestStart = rightNow - startTime;
 
     const payload = {
-        service: 'shortlet-app',
+        service: "shortlet-app",
         timestamp: new Date(),
         type: "response",
         classification: type,
@@ -52,8 +53,8 @@ const logResponse = (res: Response, body: any, code: ResponseStatus, type: strin
                 : req.connection.remoteAddress,
             body,
         },
-    }
+    };
 
     const logType = type === "error" ? "error" : "info";
-    logger.log(logType, JSON.stringify(payload))
-}
+    logger.log(logType, JSON.stringify(payload));
+};
