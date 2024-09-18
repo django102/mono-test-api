@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 
-import { RunSchedules, scheduleList } from "./api/services/CronService";
+// import { RunSchedules, scheduleList } from "./api/services/CronService";
 import expressConfig from "./config/express";
 import { mongoUri } from "./config/mongodb";
 import { redisClient } from "./config/redis";
@@ -28,8 +28,8 @@ redisClient.connect()
     .catch((err) => console.error("Could not connect to Redis...", err));
 
 
-logger.info("Starting CRON...");
-RunSchedules(scheduleList); // run cron jobs
+// logger.info("Starting CRON...");
+// RunSchedules(scheduleList); // run cron jobs
 
 
 app.listen(PORT, () => {

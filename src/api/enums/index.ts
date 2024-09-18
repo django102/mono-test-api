@@ -26,7 +26,8 @@ export enum Pagination {
 
 
 export enum TransactionType {
-    TRANSFER = "transfer"
+    TRANSFER = "transfer",
+    FUNDING = "funding"
 }
 
 
@@ -38,4 +39,9 @@ export enum TransactionStatus {
     REVERSED = "reversed",
     AWAITING_CONFIRMATION = "awaiting-confirmation",
     NEW = "new",
+}
+
+export enum GLAccount {
+    CUSTOMER_FUNDING = "001",
+    CUSTOMER_WITHDRAWAL = "002"
 }

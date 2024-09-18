@@ -49,7 +49,7 @@ const expressConfig = (app: Application): void => {
         if (!req._startTime) req._startTime = startTime;
     
         const payload = {
-            service: "shortlet-app",
+            service: "mono-test-api",
             timestamp: new Date(),
             type: "request",
             created: startTime,

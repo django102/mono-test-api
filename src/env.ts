@@ -56,5 +56,14 @@ export const env = {
             username: getOsEnvWithDefault("REDIS_USER", ""),
             password: getOsEnvWithDefault("REDIS_PASSWORD", ""),
         },
+    },
+    auth: {
+        jwt: {
+            hashtoken: getOsEnv("JWT_HASHER")
+        }
+    },
+    config: {
+        maxAccounts: toNumber(getOsEnvWithDefault("MAX_ACCOUNTS", "4")),
+        defaultAmountForNewAccounts: toNumber(getOsEnvWithDefault("NEW_ACCOUNT_BALANCE", "5000"))
     }
 };

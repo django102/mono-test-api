@@ -37,7 +37,7 @@ const logResponse = (res: Response, body: any, code: ResponseStatus, type: strin
     const ageSinceRequestStart = rightNow - startTime;
 
     const payload = {
-        service: "shortlet-app",
+        service: "mono-test-api",
         timestamp: new Date(),
         type: "response",
         classification: type,

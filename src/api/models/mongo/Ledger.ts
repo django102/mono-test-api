@@ -1,18 +1,7 @@
-import { Document, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
-import { TransactionType } from "../../../api/enums";
-
-
-interface ILedger extends Document {
-    reference: string;
-    accountNumber: string;
-    credit: number;
-    debit: number;
-    narration: string;
-    transactionType: TransactionType;
-    isReversed: boolean;
-    isDeleted: boolean;
-}
+import { TransactionType } from "../../enums";
+import ILedger from "../../interfaces/ILedger";
 
 
 const ledgerSchema = new Schema(
@@ -22,7 +11,7 @@ const ledgerSchema = new Schema(
         credit: { type: Number, required: true },
         debit: { type: Number, required: true },
         narration: { type: String, required: true },
-        transactionType: { type: TransactionType, required: true },
+        transactionType: { type: String, enum: Object.values(TransactionType), required: true },
         isReversed: { type: Boolean, default: false },
         isDeleted: { type: Boolean, default: false },
     },

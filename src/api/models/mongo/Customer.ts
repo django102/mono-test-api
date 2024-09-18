@@ -1,29 +1,22 @@
-import { Document, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
-interface ICustomer extends Document {
-    firstName: string;
-    lastName: string;
-    address: string;
-    phoneNumber: string;
-    email: string;
-    password: string;
-    isEnabled: boolean;
-}
+import ICustomer from "../../interfaces/ICustomer";
 
 
 const customerSchema = new Schema(
     {
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
-        address: { type: String, required: true },
-        phoneNumber: { type: String, required: true },
+        address: { type: String },
+        phoneNumber: { type: String },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        isEnabled: { type: Boolean, required: true, default: true },
+        isEnabled: { type: Boolean, default: true },
     },
     { timestamps: true, collation: { locale: "en_US", strength: 2 } },
 );
 
+customerSchema.index({ id: 1 });
 customerSchema.index({ email: 1 });
 
 
