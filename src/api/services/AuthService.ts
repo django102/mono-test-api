@@ -10,7 +10,7 @@ const { hashtoken } = env.auth.jwt;
 
 
 export default class AuthService {
-    public static issueToken(data: object, expiresIn: string | number = "1h"): string | null {
+    public static issueToken(data: object | null, expiresIn: string | number = "1h"): string | null {
         if (!data) return null;
         return jwt.sign(data, hashtoken, { expiresIn });
     }

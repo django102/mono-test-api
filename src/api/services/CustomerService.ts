@@ -13,7 +13,7 @@ import UtilityService from "./UtilityService";
 export default class CustomerService {
     public static async createCustomer(res:Response, customerData: Partial<ICustomer>): Promise<ServiceResponse> {
         try {
-            const password = UtilityService.hashPassword(customerData.password);
+            const password = await UtilityService.hashPassword(customerData.password);
             const customer: ICustomer = await Customer.create({ ...customerData, password });
             return await this.handleAccountCreation(res, customer.id, "Customer created successfully", customer);
         } catch (err) {
@@ -25,7 +25,7 @@ export default class CustomerService {
         try {
             const customer = await this.getCustomerInformation(customerId);
             if (!customer) {
-                return ServiceResponse.error(res, null, "Customer not found", ResponseStatus.NOT_FOUND);
+                return ServiceResponse.error(res, null, "Customer not found", ResponseStatus.BAD_REQUEST);
             }
             return await this.handleAccountCreation(res, customer.id, "Customer account created successfully", customer);
         } catch (err) {
@@ -42,10 +42,9 @@ export default class CustomerService {
                 { email }
             ]
         });
-
         if (!customer) return null;
 
-        const accounts = returnAccounts ? await AccountService.getAccounts(customer.id) : [];
+        const accounts = returnAccounts ? await AccountService.getAccounts(customerId) : [];
         return { ...customer.toObject(), accounts };
     }
 
@@ -71,6 +70,9 @@ export default class CustomerService {
             }
 
             const token = AuthService.issueToken(customer);
+
+            delete customer.password;
+
             return ServiceResponse.success(res, "Login successful", { customer, token });
         } catch (err) {
             return ServiceResponse.error(res, err);
@@ -83,6 +85,6 @@ export default class CustomerService {
         if (!success) {
             return ServiceResponse.error(res, null, message, ResponseStatus.BAD_REQUEST);
         }
-        return ServiceResponse.success(res, successMessage, { ...customer.toObject(), account });
+        return ServiceResponse.success(res, successMessage, { ...customer, account });
     }
 }
