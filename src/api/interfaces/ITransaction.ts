@@ -6,7 +6,7 @@ import { TransactionStatus, TransactionType } from "../enums";
 interface ITransaction extends Document {
     reference: string;
     sourceAccountNumber: string;
-    destinationAccountNuber: string;
+    destinationAccountNumber: string;
     amount: number;
     narration: string;
     transactionType: TransactionType;

@@ -8,24 +8,17 @@ export default class UtilityService {
     }
 
     public static generateTransactionReference(): string {
-        const uniqueReferenceIdentifier = moment().format("YYYYMMDDhhmmssSS");
-        const reference = `mono-${uniqueReferenceIdentifier}`;
-        return reference;
+        return `mono-${moment().format("YYYYMMDDHHmmssSSSS")}`;
     }
 
     public static async hashPassword(input: string): Promise<string> {
-        if (!input) {
-            return "";
-        }
+        if (!input) return ""; // Early return for empty input
 
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(input, salt);
-
-        return hashedPassword;
+        return await bcrypt.hash(input, salt);
     }
 
     public static async comparePassword(input: string, hashedPassword: string): Promise<boolean> {
-        const isSame = await bcrypt.compare(input, hashedPassword);
-        return isSame;
+        return await bcrypt.compare(input, hashedPassword);
     }
 }

@@ -5,17 +5,22 @@ const EX = 86400; // 24 hours expiry time, in seconds
 
 export default class CacheService {
     public static async set(key, value) {
-        await redisClient.set(key, value, { EX });
+        const result = await redisClient.set(key, value, { EX });
+        return result;
     }
 
     public static async hSet(key, value) {
-        await redisClient.hSet(key, value);
+        const result = await redisClient.hSet(key, value);
         await redisClient.expire(key, EX);
+
+        return result;
     }
 
     public static async jsonSet(key, value) {
-        await redisClient.json.set(key, "$", value);
+        const result = await redisClient.json.set(key, "$", value);
         await redisClient.expire(key, EX);
+
+        return result;
     }
 
     public static async get(key) {
