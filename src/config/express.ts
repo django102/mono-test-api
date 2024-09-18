@@ -17,8 +17,8 @@ const corsOptions = {
 };
 
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 50 // limit each IP to 50 requests per windowMs
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 30 // limit each IP to 50 requests per windowMs
 });
 
 
