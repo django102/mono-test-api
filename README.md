@@ -2,14 +2,13 @@
 Mono Test API
 
 
-
 &nbsp;
 
 
 ### Dependencies
 - Node >=20.10.0
 - MongoDB 7.x
-- Redis 7.x
+- RedisStack 7.x
 
 
 &nbsp;

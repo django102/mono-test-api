@@ -61,7 +61,11 @@ export default class CustomerService {
                 return ServiceResponse.error(res, null, "Customer not found", ResponseStatus.BAD_REQUEST);
             }
 
-            const updatedCustomer = await Customer.findOneAndUpdate({ _id: existingCustomer._id }, updateData, { new: true });
+            const updatedResult = await Customer.findOneAndUpdate({ _id: existingCustomer._id }, updateData, { new: true });
+            const updatedCustomer = updatedResult.toObject();
+
+            delete updatedCustomer.password;
+
             return ServiceResponse.success(res, "Customer updated successfully", updatedCustomer);
         } catch (err) {
             return ServiceResponse.error(res, err);
@@ -87,6 +91,8 @@ export default class CustomerService {
 
     
     private static async handleAccountCreation(res: Response, customerId: string, successMessage: string, customer: ICustomer): Promise<ServiceResponse> {
+        delete customer.password;
+
         const { success, message, account } = await AccountService.createAccount(customerId);
         if (!success) {
             return ServiceResponse.error(res, null, message, ResponseStatus.BAD_REQUEST);
