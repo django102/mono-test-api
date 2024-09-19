@@ -14,24 +14,36 @@ const PORT = process.env.PORT || 80;
 expressConfig(app);
 
 
-mongoose.connect(mongoUri)
-    .then(() => {
+// Function to establish connections to MongoDB and Redis
+async function startServer() {
+    const startTime = Date.now(); // Capture the start time
+
+    try {
+        // Connect to MongoDB
+        await mongoose.connect(mongoUri);
         logger.info("Connected to MongoDB");
-    })
-    .catch((err) => console.error("Could not connect to MongoDB...", err));
 
-    
-redisClient.connect()
-    .then(() => {
+        // Connect to Redis
+        await redisClient.connect();
         logger.info("Connected to Redis");
-    })
-    .catch((err) => console.error("Could not connect to Redis...", err));
 
+        // Optionally, start CRON jobs here after successful connection
+        // logger.info("Starting CRON...");
+        // RunSchedules(scheduleList);
 
-// logger.info("Starting CRON...");
-// RunSchedules(scheduleList); // run cron jobs
+        // Start the Express server after both connections are successful
+        app.listen(PORT, () => {
+            const endTime = Date.now(); // Capture the end time
+            const startupTime = endTime - startTime; // Calculate startup time in milliseconds
+            
+            logger.info(`Application started on ${PORT}`);
+            logger.info(`Startup time: ${startupTime}ms`); // Log the startup time
+        });
+    } catch (err) {
+        logger.error("Error during startup: ", err);
+        process.exit(1); // Exit the process if a connection fails
+    }
+}
 
-
-app.listen(PORT, () => {
-    logger.info(`Application started on ${PORT}`);
-});
+// Start the server
+startServer();
