@@ -22,6 +22,18 @@ ledgerSchema.index({ reference: 1 });
 ledgerSchema.index({ accountNumber: 1 });
 ledgerSchema.index({ transactionType: 1 });
 
+// Create a virtual property `id` that mirrors `_id`
+ledgerSchema.virtual("id").get(function () {
+    return this._id.toString();
+});
+  
+// Ensure virtual fields are serialized to JSON
+ledgerSchema.set("toJSON", {
+    virtuals: true
+});
+ledgerSchema.set("toObject", {
+    virtuals: true
+});
 
 const Ledger = model<ILedger>("ledger", ledgerSchema);
 export default Ledger;

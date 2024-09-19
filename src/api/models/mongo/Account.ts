@@ -15,6 +15,19 @@ const accountSchema = new Schema(
 accountSchema.index({ customerId: 1 });
 accountSchema.index({ accountNumber: 1 });
 
+// Create a virtual property `id` that mirrors `_id`
+accountSchema.virtual("id").get(function () {
+    return this._id.toString();
+});
+  
+// Ensure virtual fields are serialized to JSON
+accountSchema.set("toJSON", {
+    virtuals: true
+});
+accountSchema.set("toObject", {
+    virtuals: true
+});
+
 
 const Account = model<IAccount>("account", accountSchema);
 export default Account;

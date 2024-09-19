@@ -25,6 +25,18 @@ transactionSchema.index({ amount: 1 });
 transactionSchema.index({ transactionType: 1 });
 transactionSchema.index({ transactionStatus: 1 });
 
+// Create a virtual property `id` that mirrors `_id`
+transactionSchema.virtual("id").get(function () {
+    return this._id.toString();
+});
+  
+// Ensure virtual fields are serialized to JSON
+transactionSchema.set("toJSON", {
+    virtuals: true
+});
+transactionSchema.set("toObject", {
+    virtuals: true
+});
 
 const Transaction = model<ITransaction>("transaction", transactionSchema);
 export default Transaction;

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { env } from "../../env";
 import { ResponseStatus } from "../enums";
+import ResponseHandler from "../handlers/ResponseHandler";
 import { ServiceResponse } from "../models/ServiceResponse";
 
 
@@ -23,7 +24,7 @@ export default class AuthService {
         }
     }
 
-    public static validateAuthentication(req: Request, res: Response, next: NextFunction): ServiceResponse | void {
+    public static validateAuthentication(req: Request, res: Response, next: NextFunction): Response | void {
         const authorization = req.headers.authorization;
         if (!authorization || !authorization.startsWith("Bearer ")) {
             return AuthService.UnauthorizedResponse(res, "Authorization header missing or invalid format");
@@ -48,7 +49,7 @@ export default class AuthService {
     }
 
     
-    private static UnauthorizedResponse(res: Response, message: string): ServiceResponse {
-        return ServiceResponse.error(res, null, message, ResponseStatus.UNAUTHORIZED);
+    private static UnauthorizedResponse(res: Response, message: string): Response {
+        return ResponseHandler.handleResponse(res, ServiceResponse.error(res, null, message, ResponseStatus.UNAUTHORIZED));
     }
 }

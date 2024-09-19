@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { Types } from "mongoose";
 
 import { ResponseStatus } from "../enums";
 import ICustomer from "../interfaces/ICustomer";
@@ -13,9 +14,14 @@ import UtilityService from "./UtilityService";
 export default class CustomerService {
     public static async createCustomer(res:Response, customerData: Partial<ICustomer>): Promise<ServiceResponse> {
         try {
+            const existingCustomer = await this.getCustomerInformation(null, customerData.email);
+            if(existingCustomer) {
+                return ServiceResponse.error(res, null, "Customer with email already exists", ResponseStatus.BAD_REQUEST);
+            }
+
             const password = await UtilityService.hashPassword(customerData.password);
             const customer: ICustomer = await Customer.create({ ...customerData, password });
-            return await this.handleAccountCreation(res, customer.id, "Customer created successfully", customer);
+            return await this.handleAccountCreation(res, customer.id, "Customer created successfully", customer.toObject());
         } catch (err) {
             return ServiceResponse.error(res, err);
         }
@@ -38,7 +44,7 @@ export default class CustomerService {
 
         const customer = await Customer.findOne({
             $or: [
-                { id: customerId },
+                { _id: new Types.ObjectId(customerId) },
                 { email }
             ]
         });
@@ -55,7 +61,7 @@ export default class CustomerService {
                 return ServiceResponse.error(res, null, "Customer not found", ResponseStatus.BAD_REQUEST);
             }
 
-            const updatedCustomer = await Customer.findOneAndUpdate({ id: customerId }, updateData, { new: true });
+            const updatedCustomer = await Customer.findOneAndUpdate({ _id: existingCustomer._id }, updateData, { new: true });
             return ServiceResponse.success(res, "Customer updated successfully", updatedCustomer);
         } catch (err) {
             return ServiceResponse.error(res, err);
@@ -65,7 +71,7 @@ export default class CustomerService {
     public static async authenticateCustomer(res: Response, email: string, password: string): Promise<ServiceResponse> {
         try {
             const customer = await this.getCustomerInformation(undefined, email, true);
-            if (!customer || !UtilityService.comparePassword(password, customer.password)) {
+            if(!customer || !(await UtilityService.comparePassword(password, customer.password))) {
                 return ServiceResponse.error(res, null, "Invalid email or password", ResponseStatus.UNAUTHORIZED);
             }
 
