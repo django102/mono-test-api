@@ -103,7 +103,7 @@ describe("ResponseHandler", () => {
 
             ResponseHandler.handleResponse(res as Response, response);
 
-            expect(errorResponseSpy).toHaveBeenCalledWith(res, response.err);
+            expect(errorResponseSpy).toHaveBeenCalledWith(res, response.err, ResponseStatus.INTERNAL_SERVER_ERROR);
         });
     });
 });
